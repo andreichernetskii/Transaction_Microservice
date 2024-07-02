@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "transactions")
 public class TransactionEntity {
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
@@ -21,5 +21,5 @@ public class TransactionEntity {
     @Enumerated( EnumType.STRING )
     private TransactionType transactionType;
     private String category;
-    private LocalDate date;
+    private LocalDate creationDate;
 }

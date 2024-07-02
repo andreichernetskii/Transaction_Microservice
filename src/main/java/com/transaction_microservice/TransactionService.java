@@ -18,7 +18,7 @@ public interface TransactionService {
 
     ResponseEntity<?> deleteTransaction( Long transactionId );
 
-    ResponseEntity<?> updateTransaction( Long transactionId );
+    ResponseEntity<?> updateTransaction( Transaction transaction );
 
     BigDecimal getAnnualBalance( Integer year,
                                  Integer month,

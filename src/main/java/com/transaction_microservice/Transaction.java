@@ -11,5 +11,5 @@ public class Transaction {
     BigDecimal amount;
     TransactionType transactionType;
     String category;
-    LocalDate date;
+    LocalDate creationDate;
 }
