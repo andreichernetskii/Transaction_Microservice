@@ -1,5 +1,6 @@
 package com.transaction_microservice;
 
+import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DefaultTransactionService implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final TransactionToEntityMapper mapper;
+    private final TransactionToEntityMapper entityMapper;
+    private final TransactionToDtoMapper dtoMapper;
 
     @Override
-    public ResponseEntity<?> addTransaction( Transaction transaction ) {
+    public ResponseEntity<?> addTransaction( TransactionDto transactionDto ) {
         // Adjust the amount based on the operation type (expense or income)
-        BigDecimal amount = ( transaction.getTransactionType() == TransactionType.EXPENSE )
-                ? transaction.getAmount().negate()
-                : transaction.getAmount();
+        BigDecimal amount = ( transactionDto.getTransactionType() == TransactionType.EXPENSE )
+                ? transactionDto.getAmount().negate()
+                : transactionDto.getAmount();
 
-        TransactionEntity transactionEntity = mapper.transactionToTransactionEntity( transaction );
+        Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
+        TransactionEntity transactionEntity = entityMapper.transactionToTransactionEntity( transaction );
         transactionEntity.setAmount( amount );
 
         transactionRepository.save( transactionEntity );
@@ -51,7 +54,7 @@ public class DefaultTransactionService implements TransactionService {
         List<Transaction> transactions = new ArrayList<>();
 
         for ( TransactionEntity entity : iterable ) {
-            transactions.add( mapper.transactionEntityToTransaction( entity ) );
+            transactions.add( entityMapper.transactionEntityToTransaction( entity ) );
         }
 
         return transactions;
@@ -66,9 +69,19 @@ public class DefaultTransactionService implements TransactionService {
     }
 
     @Override
-    public ResponseEntity<?> updateTransaction( Transaction transaction ) {
-        TransactionEntity transactionEntity = transactionRepository.findById( transaction.getId() ).orElseThrow();
-        transactionRepository.save( mapper.transactionToTransactionEntity( transaction ) );
+    public ResponseEntity<?> updateTransaction( TransactionDto transactionDto ) {
+
+        if ( transactionDto == null || transactionDto.getId() == null ) {
+            return ResponseEntity.badRequest().body( "Invalid transaction data: transaction cannot be a null" );
+        }
+
+        TransactionEntity transactionEntity = transactionRepository.findById( transactionDto.getId() )
+                .orElseThrow(
+                        () -> new RuntimeException( "Entity with ID " + transactionDto.getId() + " does not exist!")
+                );
+
+        Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
+        transactionRepository.save( entityMapper.transactionToTransactionEntity( transaction ) );
 
         return ResponseEntity.ok( "Updated" );
     }
