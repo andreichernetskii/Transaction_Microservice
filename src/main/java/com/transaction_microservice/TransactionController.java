@@ -1,10 +1,5 @@
 package com.transaction_microservice;
 
-import com.transaction_microservice.Transaction;
-import com.transaction_microservice.TransactionDto;
-import com.transaction_microservice.TransactionService;
-import com.transaction_microservice.TransactionType;
-import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
