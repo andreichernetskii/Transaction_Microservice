@@ -1,9 +1,10 @@
-package com.transaction_microservice.mappers;
+package com.transaction_microservice;
 
 import com.transaction_microservice.Transaction;
 import com.transaction_microservice.TransactionDto;
 import com.transaction_microservice.TransactionService;
 import com.transaction_microservice.TransactionType;
+import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionController {
     private final TransactionService transactionService;
-    private final TransactionToDtoMapper mapper;
+
 
     @GetMapping( "/" )
     public List<Transaction> getAllTransactionOrByCriteria( @RequestParam( name = "year", required = false ) Integer year,
@@ -33,11 +34,11 @@ public class TransactionController {
 
     @PutMapping( "/" )
     public ResponseEntity<?> updateTransaction( @RequestBody TransactionDto transactionDto ) {
-        return transactionService.updateTransaction( mapper.transactionDtoToTransaction( transactionDto ) );
+        return transactionService.updateTransaction( transactionDto );
     }
 
     @PostMapping( "/" )
     public ResponseEntity<?> addTransaction( @RequestBody TransactionDto transactionDto) {
-        return transactionService.addTransaction( mapper.transactionDtoToTransaction( transactionDto ) );
+        return transactionService.addTransaction( transactionDto );
     }
 }
