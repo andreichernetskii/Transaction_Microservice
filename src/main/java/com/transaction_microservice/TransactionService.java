@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionService {
-    ResponseEntity<?> addTransaction( Transaction transaction ); // todo: fill the ResponseEntity by the object
+    ResponseEntity<?> addTransaction( TransactionDto transactionDto ); // todo: fill the ResponseEntity by the object
 
     Transaction getTransaction( Long transactionId ); // todo: am I really need it?
 
@@ -18,7 +18,7 @@ public interface TransactionService {
 
     ResponseEntity<?> deleteTransaction( Long transactionId );
 
-    ResponseEntity<?> updateTransaction( Transaction transaction );
+    ResponseEntity<?> updateTransaction( TransactionDto transactionDto );
 
     BigDecimal getAnnualBalance( Integer year,
                                  Integer month,

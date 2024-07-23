@@ -1,8 +1,8 @@
 package com.transaction_microservice;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
