@@ -1,6 +1,5 @@
 package com.transaction_microservice;
 
-import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -13,8 +13,8 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query( """
             SELECT transaction 
             FROM TransactionEntity transaction
-            WHERE ( :yearParam IS NULL OR YEAR( transaction.date ) = :yearParam ) 
-            AND ( :monthParam IS NULL OR MONTH( transaction.date ) = :monthParam ) 
+            WHERE ( :yearParam IS NULL OR YEAR( transaction.creationDate ) = :yearParam ) 
+            AND ( :monthParam IS NULL OR MONTH( transaction.creationDate ) = :monthParam ) 
             AND ( :operationTypeParam IS NULL OR transaction.transactionType = :operationTypeParam) 
             AND ( :categoryParam IS NULL OR transaction.category = :categoryParam )
             """ )
@@ -28,8 +28,8 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query( """
             SELECT SUM( transaction.amount ) 
             FROM TransactionEntity transaction 
-            WHERE ( :yearParam IS NULL OR YEAR( transaction.date ) = :yearParam ) 
-            AND ( :monthParam IS NULL OR MONTH( transaction.date ) = :monthParam ) 
+            WHERE ( :yearParam IS NULL OR YEAR( transaction.creationDate ) = :yearParam ) 
+            AND ( :monthParam IS NULL OR MONTH( transaction.creationDate ) = :monthParam ) 
             AND ( :operationTypeParam IS NULL OR transaction.transactionType = :operationTypeParam) 
             AND ( :categoryParam IS NULL OR transaction.category = :categoryParam )
             """ )
@@ -58,8 +58,8 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             SELECT SUM( transaction.amount )
             FROM TransactionEntity transaction
             WHERE transaction.transactionType = 'EXPENSE'
-            AND YEAR( transaction.date ) = YEAR( :monthParam )
-            AND MONTH( transaction.date ) = MONTH( :monthParam )
+            AND YEAR( transaction.creationDate ) = YEAR( :monthParam )
+            AND MONTH( transaction.creationDate ) = MONTH( :monthParam )
             """ )
     Double calculateMonthExpenses( @Param( "monthParam" ) LocalDate month );
 
@@ -68,7 +68,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             SELECT SUM( transaction.amount )
             FROM TransactionEntity  transaction
             WHERE transaction.transactionType = 'EXPENSE'
-            AND YEAR( transaction.date ) = YEAR( :yearParam )
+            AND YEAR( transaction.creationDate ) = YEAR( :yearParam )
             """ )
     Double calculateYearExpenses( @Param( "yearParam" ) LocalDate year );
 
@@ -77,9 +77,9 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             SELECT SUM( transaction.amount )
             FROM TransactionEntity transaction
             WHERE transaction.transactionType = 'EXPENSE'
-            AND YEAR( transaction.date ) = YEAR( :dayParam )
-            AND MONTH( transaction.date ) = MONTH( :dayParam )
-            AND DAY( transaction.date ) = DAY( :dayParam )
+            AND YEAR( transaction.creationDate ) = YEAR( :dayParam )
+            AND MONTH( transaction.creationDate ) = MONTH( :dayParam )
+            AND DAY( transaction.creationDate ) = DAY( :dayParam )
             """ )
     Double calculateDayExpenses( @Param( "dayParam" ) LocalDate day );
 
@@ -88,8 +88,8 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             SELECT SUM( transaction.amount )
             FROM TransactionEntity transaction
             WHERE transaction.transactionType = 'EXPENSE'
-            AND ( :firstWeekDayParam IS NULL OR transaction.date >= :firstWeekDayParam) 
-            AND ( :lastWeekDayParam IS NULL OR transaction.date <= :lastWeekDayParam)
+            AND ( :firstWeekDayParam IS NULL OR transaction.creationDate >= :firstWeekDayParam) 
+            AND ( :lastWeekDayParam IS NULL OR transaction.creationDate <= :lastWeekDayParam)
             """ )
     Double calculateWeekExpenses( @Param( "firstWeekDayParam" ) LocalDate firstWeekDay,
                                   @Param( "lastWeekDayParam" ) LocalDate lastWeekDay );

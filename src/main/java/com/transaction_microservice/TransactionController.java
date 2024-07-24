@@ -1,7 +1,6 @@
 package com.transaction_microservice;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,17 +22,17 @@ public class TransactionController {
     }
 
     @DeleteMapping( "/{transactionId}" )
-    public ResponseEntity<?> deleteTransaction( @PathVariable( "transactionId" ) Long transactionId ) {
-        return transactionService.deleteTransaction( transactionId );
+    public void deleteTransaction( @PathVariable( "transactionId" ) Long transactionId ) {
+        transactionService.deleteTransaction( transactionId );
     }
 
     @PutMapping( "/" )
-    public ResponseEntity<?> updateTransaction( @RequestBody TransactionDto transactionDto ) {
-        return transactionService.updateTransaction( transactionDto );
+    public void updateTransaction( @RequestBody TransactionDto transactionDto ) {
+        transactionService.updateTransaction( transactionDto );
     }
 
     @PostMapping( "/" )
-    public ResponseEntity<?> addTransaction( @RequestBody TransactionDto transactionDto) {
-        return transactionService.addTransaction( transactionDto );
+    public void addTransaction( @RequestBody TransactionDto transactionDto) {
+        transactionService.addTransaction( transactionDto );
     }
 }

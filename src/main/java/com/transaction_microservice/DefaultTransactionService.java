@@ -3,7 +3,6 @@ package com.transaction_microservice;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ public class DefaultTransactionService implements TransactionService {
     private final TransactionToDtoMapper dtoMapper;
 
     @Override
-    public ResponseEntity<?> addTransaction( TransactionDto transactionDto ) {
+    public void addTransaction( TransactionDto transactionDto ) {
         // Adjust the amount based on the operation type (expense or income)
         BigDecimal amount = ( transactionDto.getTransactionType() == TransactionType.EXPENSE )
                 ? transactionDto.getAmount().negate()
@@ -29,8 +28,6 @@ public class DefaultTransactionService implements TransactionService {
         transactionEntity.setAmount( amount );
 
         transactionRepository.save( transactionEntity );
-
-        return ResponseEntity.ok( "Ok" );
     }
 
     // todo: am I need this???
@@ -61,29 +58,25 @@ public class DefaultTransactionService implements TransactionService {
     }
 
     @Override
-    public ResponseEntity<?> deleteTransaction( Long transactionId ) {
-
+    public void deleteTransaction( Long transactionId ) {
         transactionRepository.deleteById( transactionId );
-
-        return ResponseEntity.ok( "Deleted" );
     }
 
     @Override
-    public ResponseEntity<?> updateTransaction( TransactionDto transactionDto ) {
+    public void updateTransaction( TransactionDto transactionDto ) {
 
         if ( transactionDto == null || transactionDto.getId() == null ) {
-            return ResponseEntity.badRequest().body( "Invalid transaction data: transaction cannot be a null" );
+            //todo: create a dedicated exception
+            return;
         }
 
-        TransactionEntity transactionEntity = transactionRepository.findById( transactionDto.getId() )
-                .orElseThrow(
-                        () -> new RuntimeException( "Entity with ID " + transactionDto.getId() + " does not exist!")
-                );
+        if ( transactionRepository.findById( transactionDto.getId() ).isEmpty() ) {
+            //todo: create a dedicated exception
+            throw new RuntimeException( "Entity with ID " + transactionDto.getId() + " does not exist!" );
+        }
 
         Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
         transactionRepository.save( entityMapper.transactionToTransactionEntity( transaction ) );
-
-        return ResponseEntity.ok( "Updated" );
     }
 
     @Override

@@ -9,9 +9,6 @@ import org.mockito.Mock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,7 +24,7 @@ class DefaultTransactionServiceTest {
     void addTransaction_Success() {
         TransactionDto transactionDto = createTransactionDto();
 
-        ResponseEntity<?> responseEntity = defaultTransactionService.addTransaction( transactionDto );
+        defaultTransactionService.addTransaction( transactionDto );
 
         ArgumentCaptor<TransactionEntity> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( TransactionEntity.class );
         // capturing saved file
@@ -39,7 +36,6 @@ class DefaultTransactionServiceTest {
         assertEquals( transactionDto.getAmount(), capturedTransactionEntity.getAmount() );
         assertEquals( transactionDto.getTransactionType(), capturedTransactionEntity.getTransactionType() );
         assertEquals( transactionDto.getCategory(), capturedTransactionEntity.getCategory() );
-        assertEquals( HttpStatus.OK, responseEntity.getStatusCode() );
     }
 
     private TransactionDto createTransactionDto() {

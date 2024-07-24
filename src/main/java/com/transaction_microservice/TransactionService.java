@@ -1,12 +1,10 @@
 package com.transaction_microservice;
 
-import org.springframework.http.ResponseEntity;
-
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionService {
-    ResponseEntity<?> addTransaction( TransactionDto transactionDto ); // todo: fill the ResponseEntity by the object
+    void addTransaction( TransactionDto transactionDto );
 
     Transaction getTransaction( Long transactionId ); // todo: am I really need it?
 
@@ -16,9 +14,9 @@ public interface TransactionService {
                                                       TransactionType transactionType,
                                                       String category );
 
-    ResponseEntity<?> deleteTransaction( Long transactionId );
+    void deleteTransaction( Long transactionId );
 
-    ResponseEntity<?> updateTransaction( TransactionDto transactionDto );
+    void updateTransaction( TransactionDto transactionDto );
 
     BigDecimal getAnnualBalance( Integer year,
                                  Integer month,
