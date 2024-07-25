@@ -12,5 +12,4 @@ public class Transaction {
     TransactionType transactionType;
     String category;
     LocalDate creationDate;
-
 }
