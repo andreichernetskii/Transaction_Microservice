@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @ExtendWith( MockitoExtension.class )
 class DefaultTransactionServiceTest {
@@ -84,19 +85,30 @@ class DefaultTransactionServiceTest {
     }
 
     @Test
-    void getTransaction() {
-    }
-
-    @Test
     void getAllTransactionsOrByCriteria() {
     }
 
     @Test
     void deleteTransaction() {
+        Long transactionId = 1L;
+        doNothing().when( transactionRepository ).deleteById( transactionId );
+        transactionRepository.deleteById( transactionId );
+        verify( transactionRepository, times( 1 ) ).deleteById( transactionId );
     }
 
     @Test
     void updateTransaction() {
+        TransactionDto transactionDto = createTransactionDtoObject();
+        transactionDto.setId( 1L );
+        Transaction transaction = createTransactionObject();
+        TransactionEntity transactionEntity = createTransactionEntityObject();
+
+        when( transactionRepository.findById( transactionDto.getId() ) ).thenReturn( Optional.of( transactionEntity ) );
+        transactionDto.setCategory( "Games" );
+
+        when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( transaction );
+        when( transactionToEntityMapper.transactionToTransactionEntity( transaction ) ).thenReturn( transactionEntity );
+
     }
 
     @Test

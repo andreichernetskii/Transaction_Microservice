@@ -6,8 +6,6 @@ import java.util.List;
 public interface TransactionService {
     void addTransaction( TransactionDto transactionDto );
 
-    Transaction getTransaction( Long transactionId ); // todo: am I really need it?
-
     // todo: refacto to call by user id
     List<Transaction> getAllTransactionsOrByCriteria( Integer year,
                                                       Integer month,

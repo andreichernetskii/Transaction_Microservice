@@ -2,6 +2,7 @@ package com.transaction_microservice;
 
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +34,6 @@ public class DefaultTransactionService implements TransactionService {
                 : transactionDto.getAmount();
     }
 
-    // todo: am I need this???
-    @Override
-    public Transaction getTransaction( Long transactionId ) {
-        return null;
-    }
-
     @Override
     public List<Transaction> getAllTransactionsOrByCriteria( Integer year,
                                                              Integer month,
@@ -67,7 +62,6 @@ public class DefaultTransactionService implements TransactionService {
 
     @Override
     public void updateTransaction( TransactionDto transactionDto ) {
-
         if ( transactionDto == null || transactionDto.getId() == null ) {
             //todo: create a dedicated exception
             return;
