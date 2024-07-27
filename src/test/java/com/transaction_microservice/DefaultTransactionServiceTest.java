@@ -33,11 +33,10 @@ class DefaultTransactionServiceTest {
     @Test
     void addTransaction_Success() {
         TransactionDto transactionDto = createTransactionDtoObject();
-        Transaction transaction = createTransactionObject();
         TransactionEntity transactionEntity = createTransactionEntityObject();
 
-        when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( transaction );
-        when( transactionToEntityMapper.transactionToTransactionEntity( transaction ) ).thenReturn( transactionEntity );
+        when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( any( Transaction.class) );
+        when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
 
         defaultTransactionService.addTransaction( transactionDto );
 
@@ -55,17 +54,6 @@ class DefaultTransactionServiceTest {
     private TransactionDto createTransactionDtoObject() {
         return TransactionDto
                 .builder()
-                .amount( new BigDecimal( 100 ) )
-                .transactionType( TransactionType.INCOME )
-                .category( "Car" )
-                .creationDate( LocalDate.now() )
-                .build();
-    }
-
-    private Transaction createTransactionObject() {
-        return Transaction
-                .builder()
-                .id( 1L )
                 .amount( new BigDecimal( 100 ) )
                 .transactionType( TransactionType.INCOME )
                 .category( "Car" )
@@ -100,15 +88,15 @@ class DefaultTransactionServiceTest {
     void updateTransaction() {
         TransactionDto transactionDto = createTransactionDtoObject();
         transactionDto.setId( 1L );
-        Transaction transaction = createTransactionObject();
         TransactionEntity transactionEntity = createTransactionEntityObject();
 
         when( transactionRepository.findById( transactionDto.getId() ) ).thenReturn( Optional.of( transactionEntity ) );
         transactionDto.setCategory( "Games" );
 
-        when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( transaction );
-        when( transactionToEntityMapper.transactionToTransactionEntity( transaction ) ).thenReturn( transactionEntity );
+        when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( any( Transaction.class ) );
+        when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
 
+        assertEquals( transactionDto.getId()... );
     }
 
     @Test
