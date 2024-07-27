@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @ExtendWith( MockitoExtension.class )
-public class DefaultTransactionServiceTest {
+class DefaultTransactionServiceTest {
     @Mock
     private TransactionRepository transactionRepository;
     @Mock
