@@ -18,16 +18,19 @@ public class DefaultTransactionService implements TransactionService {
 
     @Override
     public void addTransaction( TransactionDto transactionDto ) {
-        // Adjust the amount based on the operation type (expense or income)
-        BigDecimal amount = ( transactionDto.getTransactionType() == TransactionType.EXPENSE )
-                ? transactionDto.getAmount().negate()
-                : transactionDto.getAmount();
+        BigDecimal amount = getBigDecimalWithSign( transactionDto );
 
         Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
         TransactionEntity transactionEntity = entityMapper.transactionToTransactionEntity( transaction );
         transactionEntity.setAmount( amount );
 
         transactionRepository.save( transactionEntity );
+    }
+
+    private BigDecimal getBigDecimalWithSign( TransactionDto transactionDto ) {
+        return ( transactionDto.getTransactionType() == TransactionType.EXPENSE )
+                ? transactionDto.getAmount().negate()
+                : transactionDto.getAmount();
     }
 
     // todo: am I need this???
