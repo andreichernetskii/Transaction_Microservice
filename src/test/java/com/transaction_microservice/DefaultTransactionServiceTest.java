@@ -28,8 +28,6 @@ class DefaultTransactionServiceTest {
     @InjectMocks
     private DefaultTransactionService defaultTransactionService;
 
-    //todo: tests for mappers
-
     @Test
     void addTransaction_Success() {
         TransactionDto transactionDto = createTransactionDtoObject();
