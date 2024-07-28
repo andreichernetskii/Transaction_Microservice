@@ -1,8 +1,9 @@
 package com.transaction_microservice;
 
+import com.transaction_microservice.exception.EmptyTransactionDtoException;
+import com.transaction_microservice.exception.TransactionEntityNotFoundException;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -63,13 +64,11 @@ public class DefaultTransactionService implements TransactionService {
     @Override
     public void updateTransaction( TransactionDto transactionDto ) {
         if ( transactionDto == null || transactionDto.getId() == null ) {
-            //todo: create a dedicated exception
-            return;
+            throw new EmptyTransactionDtoException( "TransactionDto is null!" );
         }
 
         if ( transactionRepository.findById( transactionDto.getId() ).isEmpty() ) {
-            //todo: create a dedicated exception
-            throw new RuntimeException( "Entity with ID " + transactionDto.getId() + " does not exist!" );
+            throw new TransactionEntityNotFoundException( "Entity with ID " + transactionDto.getId() + " does not exist!" );
         }
 
         Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
