@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.*;
 
 @ExtendWith( MockitoExtension.class )
 class DefaultTransactionServiceTest {
@@ -96,7 +96,29 @@ class DefaultTransactionServiceTest {
     }
 
     @Test
-    void getAllTransactionsOrByCriteria() {
+    void getAllTransactionsOrByCriteria_CriteriaIsNull() {
+        List<Transaction> transactions = new ArrayList<>(
+                Arrays.asList( createTransactionObject(), createTransactionObject() )
+        );
+
+        List<TransactionEntity> transactionEntities = new ArrayList<>(
+                Arrays.asList( createTransactionEntityObject(), createTransactionEntityObject() )
+        );
+
+        when( transactionRepository.findOperationsByCriteria( null, null, null, null ) )
+                .thenReturn( transactionEntities );
+        when( transactionToEntityMapper.transactionEntityToTransaction( any( TransactionEntity.class) ) )
+                .thenReturn( Transaction.builder().build() );
+
+        List<Transaction> result = defaultTransactionService.getAllTransactionsOrByCriteria( null, null, null, null );
+
+        assertEquals( transactions.size(), result.size() );
+        verify( transactionRepository, times( 1 )).findOperationsByCriteria( null, null, null, null );
+
+    }
+
+    @Test
+    void getAllTransactionsOrByCriteria_CriteriaExist() {
     }
 
     @Test

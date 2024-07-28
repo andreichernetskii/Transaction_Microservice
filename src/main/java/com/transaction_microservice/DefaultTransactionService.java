@@ -57,21 +57,30 @@ public class DefaultTransactionService implements TransactionService {
         }
     }
 
+    /**
+     * If all parameters are null, the method will return all transactions from DB.
+     * If not - will be returned transactions according to criteria in parameters.
+     *
+     * @param year
+     * @param month
+     * @param transactionType
+     * @param category
+     * @return
+     */
     @Override
     public List<Transaction> getAllTransactionsOrByCriteria( Integer year,
                                                              Integer month,
                                                              TransactionType transactionType,
                                                              String category ) {
 
-        Iterable<TransactionEntity> iterable = transactionRepository.findOperationsByCriteria(
+        List<TransactionEntity> transactionEntities = transactionRepository.findOperationsByCriteria(
                 year,
                 month,
                 transactionType,
                 category );
 
         List<Transaction> transactions = new ArrayList<>();
-
-        for ( TransactionEntity entity : iterable ) {
+        for ( TransactionEntity entity : transactionEntities ) {
             transactions.add( entityMapper.transactionEntityToTransaction( entity ) );
         }
 
