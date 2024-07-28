@@ -20,12 +20,13 @@ public class DefaultTransactionService implements TransactionService {
 
     @Override
     public void addTransaction( TransactionDto transactionDto ) {
-        BigDecimal amount = getBigDecimalWithSign( transactionDto );
+        checkTransactionDtoNotNull( transactionDto );
 
+        BigDecimal amount = getBigDecimalWithSign( transactionDto );
         Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
         TransactionEntity transactionEntity = entityMapper.transactionToTransactionEntity( transaction );
-        transactionEntity.setAmount( amount );
 
+        transactionEntity.setAmount( amount );
         transactionRepository.save( transactionEntity );
     }
 
@@ -33,6 +34,27 @@ public class DefaultTransactionService implements TransactionService {
         return ( transactionDto.getTransactionType() == TransactionType.EXPENSE )
                 ? transactionDto.getAmount().negate()
                 : transactionDto.getAmount();
+    }
+
+    @Override
+    public void updateTransaction( TransactionDto transactionDto ) {
+        checkTransactionDtoNotNull( transactionDto );
+        checkTransactionExists( transactionDto );
+
+        Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
+        transactionRepository.save( entityMapper.transactionToTransactionEntity( transaction ) );
+    }
+
+    private void checkTransactionDtoNotNull( TransactionDto transactionDto ) {
+        if ( transactionDto == null || transactionDto.getId() == null ) {
+            throw new EmptyTransactionDtoException( "TransactionDto is null!" );
+        }
+    }
+
+    private void checkTransactionExists( TransactionDto transactionDto ) {
+        if ( transactionRepository.findById( transactionDto.getId() ).isEmpty() ) {
+            throw new TransactionEntityNotFoundException( "Entity with ID " + transactionDto.getId() + " does not exist!" );
+        }
     }
 
     @Override
@@ -58,21 +80,10 @@ public class DefaultTransactionService implements TransactionService {
 
     @Override
     public void deleteTransaction( Long transactionId ) {
+        if ( transactionRepository.findById( transactionId ).isEmpty() ) {
+            throw new TransactionEntityNotFoundException( "Entity with ID " + transactionId + " does not exist!" );
+        }
         transactionRepository.deleteById( transactionId );
-    }
-
-    @Override
-    public void updateTransaction( TransactionDto transactionDto ) {
-        if ( transactionDto == null || transactionDto.getId() == null ) {
-            throw new EmptyTransactionDtoException( "TransactionDto is null!" );
-        }
-
-        if ( transactionRepository.findById( transactionDto.getId() ).isEmpty() ) {
-            throw new TransactionEntityNotFoundException( "Entity with ID " + transactionDto.getId() + " does not exist!" );
-        }
-
-        Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
-        transactionRepository.save( entityMapper.transactionToTransactionEntity( transaction ) );
     }
 
     @Override
