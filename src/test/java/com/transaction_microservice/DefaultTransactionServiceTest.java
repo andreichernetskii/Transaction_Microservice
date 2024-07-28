@@ -96,7 +96,7 @@ class DefaultTransactionServiceTest {
     }
 
     @Test
-    void getAllTransactionsOrByCriteria_CriteriaIsNull() {
+    void getAllTransactionsOrByCriteria() {
         List<Transaction> transactions = new ArrayList<>(
                 Arrays.asList( createTransactionObject(), createTransactionObject() )
         );
@@ -115,10 +115,6 @@ class DefaultTransactionServiceTest {
         assertEquals( transactions.size(), result.size() );
         verify( transactionRepository, times( 1 )).findOperationsByCriteria( null, null, null, null );
 
-    }
-
-    @Test
-    void getAllTransactionsOrByCriteria_CriteriaExist() {
     }
 
     @Test
