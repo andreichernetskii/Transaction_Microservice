@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @ExtendWith( MockitoExtension.class )
-class DefaultTransactionServiceTest {
+class DefaultTransactionServiceImplTest {
     @Mock
     private TransactionRepository transactionRepository;
     @Mock
@@ -29,7 +29,7 @@ class DefaultTransactionServiceTest {
     @Mock
     private TransactionToEntityMapper transactionToEntityMapper;
     @InjectMocks
-    private DefaultTransactionService defaultTransactionService;
+    private DefaultTransactionServiceImpl defaultTransactionServiceImpl;
 
     @Test
     void addTransactionTest_SuccessAdd() {
@@ -39,7 +39,7 @@ class DefaultTransactionServiceTest {
         when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( createTransactionObject() );
         when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
 
-        defaultTransactionService.addTransaction( transactionDto );
+        defaultTransactionServiceImpl.addTransaction( transactionDto );
 
         ArgumentCaptor<TransactionEntity> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( TransactionEntity.class );
         // capturing saved file
@@ -56,11 +56,11 @@ class DefaultTransactionServiceTest {
     void addTransactionTest_ThrowEmptyTransactionDtoException() {
         TransactionDto transactionDtoIdIsNull = createTransactionDtoObjectIdIsNull();
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionService.addTransaction( transactionDtoIdIsNull ) );
+                () -> defaultTransactionServiceImpl.addTransaction( transactionDtoIdIsNull ) );
 
         TransactionDto transactionDtoNull = null;
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionService.addTransaction( transactionDtoNull ) );
+                () -> defaultTransactionServiceImpl.addTransaction( transactionDtoNull ) );
     }
 
     private TransactionDto createTransactionDtoObjectIdIsNull() {
@@ -110,7 +110,7 @@ class DefaultTransactionServiceTest {
         when( transactionToEntityMapper.transactionEntityToTransaction( any( TransactionEntity.class) ) )
                 .thenReturn( Transaction.builder().build() );
 
-        List<Transaction> result = defaultTransactionService.getAllTransactionsOrByCriteria( null, null, null, null );
+        List<Transaction> result = defaultTransactionServiceImpl.getAllTransactionsOrByCriteria( null, null, null, null );
 
         assertEquals( transactions.size(), result.size() );
         verify( transactionRepository, times( 1 )).findOperationsByCriteria( null, null, null, null );
@@ -138,7 +138,7 @@ class DefaultTransactionServiceTest {
         when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( createTransactionObject() );
         when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
 
-        defaultTransactionService.updateTransaction( transactionDto );
+        defaultTransactionServiceImpl.updateTransaction( transactionDto );
 
         ArgumentCaptor<TransactionEntity> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( TransactionEntity.class );
         // capturing saved file
@@ -154,11 +154,11 @@ class DefaultTransactionServiceTest {
     void updateTransactionTest_ThrowEmptyTransactionDtoException() {
         TransactionDto transactionDtoIdIsNull = createTransactionDtoObjectIdIsNull();
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionService.updateTransaction( transactionDtoIdIsNull ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( transactionDtoIdIsNull ) );
 
         TransactionDto transactionDtoNull = null;
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionService.updateTransaction( transactionDtoNull ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( transactionDtoNull ) );
     }
 
     @Test
@@ -168,7 +168,7 @@ class DefaultTransactionServiceTest {
 
         when( transactionRepository.findById( transactionDto.getId() ) ).thenReturn( Optional.empty() );
         assertThrows( TransactionEntityNotFoundException.class,
-                () -> defaultTransactionService.updateTransaction( transactionDto ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( transactionDto ) );
     }
 
     @Test

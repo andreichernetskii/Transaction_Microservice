@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -33,16 +34,11 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             AND ( :operationTypeParam IS NULL OR transaction.transactionType = :operationTypeParam) 
             AND ( :categoryParam IS NULL OR transaction.category = :categoryParam )
             """ )
-    Double calculateAnnualBalanceByCriteria( @Param( "accountId" ) Long accountId,
+    BigDecimal calculateBalanceByCriteria( /*@Param( "accountId" ) Long accountId,*/
                                              @Param( "yearParam" ) Integer year,
                                              @Param( "monthParam" ) Integer month,
                                              @Param( "operationTypeParam" ) TransactionType transactionType,
                                              @Param( "categoryParam" ) String category );
-
-    // Default method to calculate the annual balance without specifying criteria.
-    default Double calculateAnnualBalance( Long accountId) {
-        return calculateAnnualBalanceByCriteria( accountId, null, null, null, null );
-    }
 
     // Custom query to retrieve a list of categories for a specific account.
     @Query( """
@@ -51,7 +47,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             GROUP BY transaction.category 
             ORDER BY transaction.category
             """ )
-    List<String> getCategories( @Param( "accountId" ) Long accountId );
+    List<String> getCategories( /*@Param( "accountId" ) Long accountId*/ );
 
     // Custom query to calculate monthly expenses for a given month.
     @Query( """

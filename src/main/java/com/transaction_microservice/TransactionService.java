@@ -16,10 +16,10 @@ public interface TransactionService {
 
     void updateTransaction( TransactionDto transactionDto );
 
-    BigDecimal getAnnualBalance( Integer year,
-                                 Integer month,
-                                 TransactionType transactionType,
-                                 String category );
+    BigDecimal getBalance( Integer year,
+                           Integer month,
+                           TransactionType transactionType,
+                           String category );
 
     List<String> getTransactionCategories();
 

@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultTransactionService implements TransactionService {
+public class DefaultTransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionToEntityMapper entityMapper;
     private final TransactionToDtoMapper dtoMapper;
@@ -95,21 +96,31 @@ public class DefaultTransactionService implements TransactionService {
         transactionRepository.deleteById( transactionId );
     }
 
+    /**
+     * Method will return full balance if arguments are null.
+     * Otherwise, according to arguments.
+     * @param year
+     * @param month
+     * @param transactionType
+     * @param category
+     * @return
+     */
     @Override
-    public BigDecimal getAnnualBalance( Integer year,
-                                        Integer month,
-                                        TransactionType transactionType,
-                                        String category ) {
-        return null;
+    public BigDecimal getBalance( Integer year,
+                                  Integer month,
+                                  TransactionType transactionType,
+                                  String category ) {
+
+        return transactionRepository.calculateBalanceByCriteria( year, month, transactionType, category );
     }
 
     @Override
     public List<String> getTransactionCategories() {
-        return null;
+        return transactionRepository.getCategories();
     }
 
     @Override
     public List<String> getTransactionTypes() {
-        return null;
+        return Arrays.stream( TransactionType.values() ).map( Enum::toString ).toList();
     }
 }
