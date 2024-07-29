@@ -170,16 +170,4 @@ class DefaultTransactionServiceImplTest {
         assertThrows( TransactionEntityNotFoundException.class,
                 () -> defaultTransactionServiceImpl.updateTransaction( transactionDto ) );
     }
-
-    @Test
-    void getAnnualBalance() {
-    }
-
-    @Test
-    void getTransactionCategories() {
-    }
-
-    @Test
-    void getTransactionTypes() {
-    }
 }
