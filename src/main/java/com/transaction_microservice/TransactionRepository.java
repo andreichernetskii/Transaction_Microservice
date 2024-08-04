@@ -3,12 +3,13 @@ package com.transaction_microservice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
+@Repository
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
     // Custom query to find financial transactions based on specified criteria.
     @Query( """
@@ -89,22 +90,4 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
             """ )
     Double calculateWeekExpenses( @Param( "firstWeekDayParam" ) LocalDate firstWeekDay,
                                   @Param( "lastWeekDayParam" ) LocalDate lastWeekDay );
-
-    // Custom query to find a financial transaction by its ID and associated account.
-    // todo: maybe in future should be changed or deleted from the project
-    @Query( """
-            SELECT operation
-            FROM TransactionEntity operation
-            WHERE operation.id = :operationId
-            """ )
-    Optional<TransactionEntity> findByAccountIdPlusOperationId( @Param( "operationId" ) Long operationId,
-                                                                @Param( "accountId" ) Long accountId );
-
-    // todo: maybe in future should be changed or deleted from the project
-    @Query( """
-            SELECT COUNT(*)
-            FROM TransactionEntity operation 
-            WHERE operation.account.id = :accountId
-            """)
-    Integer countByAccountId( @Param( "accountId" ) Long accountId );
 }

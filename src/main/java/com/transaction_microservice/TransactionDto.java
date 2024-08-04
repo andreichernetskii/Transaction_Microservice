@@ -1,5 +1,6 @@
 package com.transaction_microservice;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class TransactionDto {
+    @Nullable
     private Long id;
     private BigDecimal amount;
     private TransactionType transactionType;

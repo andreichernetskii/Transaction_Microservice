@@ -1,7 +1,7 @@
 package com.transaction_microservice;
 
-import com.transaction_microservice.exception.EmptyTransactionDtoException;
-import com.transaction_microservice.exception.TransactionEntityNotFoundException;
+import com.transaction_microservice.exception_handler.exceptions.EmptyTransactionDtoException;
+import com.transaction_microservice.exception_handler.exceptions.TransactionEntityNotFoundException;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package com.transaction_microservice;
 
-import com.transaction_microservice.exception.EmptyTransactionDtoException;
-import com.transaction_microservice.exception.TransactionEntityNotFoundException;
+import com.transaction_microservice.exception_handler.exceptions.EmptyTransactionDtoException;
+import com.transaction_microservice.exception_handler.exceptions.TransactionEntityNotFoundException;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,6 @@ public class DefaultTransactionServiceImpl implements TransactionService {
 
     @Override
     public void addTransaction( TransactionDto transactionDto ) {
-        checkTransactionDtoNotNull( transactionDto );
-
         BigDecimal amount = getBigDecimalWithSign( transactionDto );
         Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
         TransactionEntity transactionEntity = entityMapper.transactionToTransactionEntity( transaction );

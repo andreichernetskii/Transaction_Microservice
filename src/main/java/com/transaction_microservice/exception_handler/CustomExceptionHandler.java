@@ -1,4 +1,4 @@
-package com.transaction_microservice.exception;
+package com.transaction_microservice.exception_handler;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
