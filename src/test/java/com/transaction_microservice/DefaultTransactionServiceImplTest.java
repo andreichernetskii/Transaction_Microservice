@@ -1,9 +1,15 @@
 package com.transaction_microservice;
 
+import com.transaction_microservice.enums.TransactionType;
 import com.transaction_microservice.exception_handler.exceptions.EmptyTransactionDtoException;
 import com.transaction_microservice.exception_handler.exceptions.TransactionEntityNotFoundException;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
+import com.transaction_microservice.model.Transaction;
+import com.transaction_microservice.model.TransactionDto;
+import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.repository.TransactionRepository;
+import com.transaction_microservice.service.DefaultTransactionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

@@ -1,8 +1,8 @@
 package com.transaction_microservice.mappers;
 
-import com.transaction_microservice.Transaction;
-import com.transaction_microservice.TransactionEntity;
-import com.transaction_microservice.TransactionType;
+import com.transaction_microservice.model.Transaction;
+import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.enums.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

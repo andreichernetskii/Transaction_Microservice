@@ -1,4 +1,4 @@
-package com.transaction_microservice;
+package com.transaction_microservice.enums;
 
 public enum TransactionType {
     INCOME,

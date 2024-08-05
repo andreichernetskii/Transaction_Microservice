@@ -1,5 +1,6 @@
-package com.transaction_microservice;
+package com.transaction_microservice.model;
 
+import com.transaction_microservice.enums.TransactionType;
 import lombok.Builder;
 import lombok.Value;
 

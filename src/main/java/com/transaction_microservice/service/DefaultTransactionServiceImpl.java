@@ -1,9 +1,14 @@
-package com.transaction_microservice;
+package com.transaction_microservice.service;
 
+import com.transaction_microservice.enums.TransactionType;
 import com.transaction_microservice.exception_handler.exceptions.EmptyTransactionDtoException;
 import com.transaction_microservice.exception_handler.exceptions.TransactionEntityNotFoundException;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
+import com.transaction_microservice.model.Transaction;
+import com.transaction_microservice.model.TransactionDto;
+import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

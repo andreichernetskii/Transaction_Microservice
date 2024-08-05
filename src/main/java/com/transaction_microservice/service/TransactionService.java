@@ -1,4 +1,8 @@
-package com.transaction_microservice;
+package com.transaction_microservice.service;
+
+import com.transaction_microservice.enums.TransactionType;
+import com.transaction_microservice.model.Transaction;
+import com.transaction_microservice.model.TransactionDto;
 
 import java.math.BigDecimal;
 import java.util.List;
