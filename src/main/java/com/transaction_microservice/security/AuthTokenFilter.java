@@ -31,21 +31,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                      FilterChain filterChain ) throws ServletException, IOException {
 
         try {
-            Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                logger.info("Header: {} = {}", headerName, request.getHeader(headerName));
-            }
-
-            // Логирование всех кук запроса
-            if (request.getCookies() != null) {
-                for ( Cookie cookie : request.getCookies()) {
-                    logger.info("Cookie: {} = {}", cookie.getName(), cookie.getValue());
-                }
-            } else {
-                logger.warn("No cookies found in request");
-            }
-
             String jwt = jwtUtils.parseJwt( request );
 
             if ( jwt != null && jwtUtils.validateJwtToken( jwt ) ) {
