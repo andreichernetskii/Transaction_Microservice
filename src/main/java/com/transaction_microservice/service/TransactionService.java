@@ -8,24 +8,26 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionService {
-    void addTransaction( TransactionDto transactionDto );
+    void addTransaction( String userId, TransactionDto transactionDto );
 
     // todo: refacto to call by user id
-    List<Transaction> getAllTransactionsOrByCriteria( Integer year,
+    List<Transaction> getAllTransactionsOrByCriteria( String userId,
+                                                      Integer year,
                                                       Integer month,
                                                       TransactionType transactionType,
                                                       String category );
 
-    void deleteTransaction( Long transactionId );
+    void deleteTransaction( String userId, Long transactionId );
 
-    void updateTransaction( TransactionDto transactionDto );
+    void updateTransaction( String userId, TransactionDto transactionDto );
 
-    BigDecimal getBalance( Integer year,
+    BigDecimal getBalance( String userId,
+                           Integer year,
                            Integer month,
                            TransactionType transactionType,
                            String category );
 
-    List<String> getTransactionCategories();
+    List<String> getTransactionCategories( String userId );
 
     List<String> getTransactionTypes();
 }

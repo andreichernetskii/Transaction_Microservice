@@ -1,10 +1,12 @@
 package com.transaction_microservice.controller;
 
+import com.transaction_microservice.model.SearchCriteria;
 import com.transaction_microservice.service.TransactionService;
-import com.transaction_microservice.enums.TransactionType;
 import com.transaction_microservice.model.Transaction;
 import com.transaction_microservice.model.TransactionDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,26 +19,33 @@ public class TransactionController {
 
 
     @GetMapping( "/" )
-    public List<Transaction> getAllTransactionOrByCriteria( @RequestParam( name = "year", required = false ) Integer year,
-                                                            @RequestParam( name = "month", required = false ) Integer month,
-                                                            @RequestParam( name = "transactionType", required = false ) TransactionType transactionType,
-                                                            @RequestParam( name = "category", required = false ) String category ) {
+    public List<Transaction> getAllTransactionOrByCriteria( @AuthenticationPrincipal UserDetails userDetails,
+                                                            @RequestBody( required = false ) SearchCriteria searchCriteria ) {
 
-        return transactionService.getAllTransactionsOrByCriteria( year, month, transactionType, category );
+        return transactionService.getAllTransactionsOrByCriteria(
+                userDetails.getUsername(),
+                searchCriteria.getYear(),
+                searchCriteria.getMonth(),
+                searchCriteria.getTransactionType(),
+                searchCriteria.getCategory() );
     }
 
     @DeleteMapping( "/{transactionId}" )
-    public void deleteTransaction( @PathVariable( "transactionId" ) Long transactionId ) {
-        transactionService.deleteTransaction( transactionId );
+    public void deleteTransaction( @AuthenticationPrincipal UserDetails userDetails,
+                                   @PathVariable( "transactionId" ) Long transactionId ) {
+        transactionService.deleteTransaction( userDetails.getUsername(), transactionId );
     }
 
     @PutMapping( "/" )
-    public void updateTransaction( @RequestBody TransactionDto transactionDto ) {
-        transactionService.updateTransaction( transactionDto );
+    public void updateTransaction( @AuthenticationPrincipal UserDetails userDetails,
+                                   @RequestBody TransactionDto transactionDto ) {
+        transactionService.updateTransaction( userDetails.getUsername(), transactionDto );
     }
 
     @PostMapping( "/" )
-    public void addTransaction( @RequestBody TransactionDto transactionDto) {
-        transactionService.addTransaction( transactionDto );
+    public void addTransaction(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody TransactionDto transactionDto) {
+        transactionService.addTransaction( userDetails.getUsername(), transactionDto );
     }
 }

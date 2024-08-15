@@ -25,7 +25,8 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     private final TransactionToDtoMapper dtoMapper;
 
     @Override
-    public void addTransaction( TransactionDto transactionDto ) {
+    public void addTransaction( String userId, TransactionDto transactionDto ) {
+        transactionDto.setUserId( userId );
         BigDecimal amount = getBigDecimalWithSign( transactionDto );
         Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
         TransactionEntity transactionEntity = entityMapper.transactionToTransactionEntity( transaction );
@@ -41,7 +42,7 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void updateTransaction( TransactionDto transactionDto ) {
+    public void updateTransaction( String userId, TransactionDto transactionDto ) {
         checkTransactionDtoNotNull( transactionDto );
         checkTransactionExists( transactionDto );
 
@@ -72,12 +73,14 @@ public class DefaultTransactionServiceImpl implements TransactionService {
      * @return
      */
     @Override
-    public List<Transaction> getAllTransactionsOrByCriteria( Integer year,
+    public List<Transaction> getAllTransactionsOrByCriteria( String userId,
+                                                             Integer year,
                                                              Integer month,
                                                              TransactionType transactionType,
                                                              String category ) {
 
         List<TransactionEntity> transactionEntities = transactionRepository.findOperationsByCriteria(
+                userId,
                 year,
                 month,
                 transactionType,
@@ -92,7 +95,7 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void deleteTransaction( Long transactionId ) {
+    public void deleteTransaction( String userId, Long transactionId ) {
         if ( transactionRepository.findById( transactionId ).isEmpty() ) {
             throw new TransactionEntityNotFoundException( "Entity with ID " + transactionId + " does not exist!" );
         }
@@ -102,6 +105,7 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     /**
      * Method will return full balance if arguments are null.
      * Otherwise, according to arguments.
+     *
      * @param year
      * @param month
      * @param transactionType
@@ -109,17 +113,18 @@ public class DefaultTransactionServiceImpl implements TransactionService {
      * @return
      */
     @Override
-    public BigDecimal getBalance( Integer year,
+    public BigDecimal getBalance( String userId,
+                                  Integer year,
                                   Integer month,
                                   TransactionType transactionType,
                                   String category ) {
 
-        return transactionRepository.calculateBalanceByCriteria( year, month, transactionType, category );
+        return transactionRepository.calculateBalanceByCriteria( userId, year, month, transactionType, category );
     }
 
     @Override
-    public List<String> getTransactionCategories() {
-        return transactionRepository.getCategories();
+    public List<String> getTransactionCategories( String userId ) {
+        return transactionRepository.getCategories( userId );
     }
 
     @Override

@@ -15,6 +15,8 @@ import java.time.LocalDate;
 public class TransactionDto {
     @Nullable
     private Long id;
+    @Nullable
+    String userId;
     private BigDecimal amount;
     private TransactionType transactionType;
     private String category;

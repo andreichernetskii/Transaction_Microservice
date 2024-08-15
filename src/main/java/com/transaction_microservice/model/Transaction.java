@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class Transaction {
     Long id;
+    String userId;
     BigDecimal amount;
     TransactionType transactionType;
     String category;

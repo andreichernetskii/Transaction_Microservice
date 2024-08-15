@@ -17,12 +17,13 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query( """
             SELECT transaction 
             FROM TransactionEntity transaction
-            WHERE ( :yearParam IS NULL OR YEAR( transaction.creationDate ) = :yearParam ) 
+            WHERE transaction.userId = :userId
+            AND ( :yearParam IS NULL OR YEAR( transaction.creationDate ) = :yearParam ) 
             AND ( :monthParam IS NULL OR MONTH( transaction.creationDate ) = :monthParam ) 
             AND ( :operationTypeParam IS NULL OR transaction.transactionType = :operationTypeParam) 
             AND ( :categoryParam IS NULL OR transaction.category = :categoryParam )
             """ )
-    List<TransactionEntity> findOperationsByCriteria( /*@Param( "accountId" ) Long accountId,*/
+    List<TransactionEntity> findOperationsByCriteria( @Param( "userId" ) String userId,
                                                 @Param( "yearParam" ) Integer year,
                                                 @Param( "monthParam" ) Integer month,
                                                 @Param( "operationTypeParam" ) TransactionType transactionType,
@@ -32,12 +33,13 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query( """
             SELECT SUM( transaction.amount ) 
             FROM TransactionEntity transaction 
-            WHERE ( :yearParam IS NULL OR YEAR( transaction.creationDate ) = :yearParam ) 
+            WHERE transaction.userId = :userId 
+            AND ( :yearParam IS NULL OR YEAR( transaction.creationDate ) = :yearParam ) 
             AND ( :monthParam IS NULL OR MONTH( transaction.creationDate ) = :monthParam ) 
             AND ( :operationTypeParam IS NULL OR transaction.transactionType = :operationTypeParam) 
             AND ( :categoryParam IS NULL OR transaction.category = :categoryParam )
             """ )
-    BigDecimal calculateBalanceByCriteria( /*@Param( "accountId" ) Long accountId,*/
+    BigDecimal calculateBalanceByCriteria( @Param( "userId" ) String userId,
                                              @Param( "yearParam" ) Integer year,
                                              @Param( "monthParam" ) Integer month,
                                              @Param( "operationTypeParam" ) TransactionType transactionType,
@@ -47,10 +49,11 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     @Query( """
             SELECT transaction.category 
             FROM TransactionEntity transaction
+            WHERE transaction.userId = :userId
             GROUP BY transaction.category 
             ORDER BY transaction.category
             """ )
-    List<String> getCategories( /*@Param( "accountId" ) Long accountId*/ );
+    List<String> getCategories( @Param( "userId" ) String userId );
 
     // Custom query to calculate monthly expenses for a given month.
     @Query( """

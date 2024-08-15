@@ -20,6 +20,7 @@ public class TransactionEntity {
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
+    private String userId;
     private BigDecimal amount;
     @Enumerated( EnumType.STRING )
     private TransactionType transactionType;

@@ -2,7 +2,6 @@ package com.transaction_microservice.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 @Component
 @RequiredArgsConstructor
@@ -34,9 +32,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = jwtUtils.parseJwt( request );
 
             if ( jwt != null && jwtUtils.validateJwtToken( jwt ) ) {
-                String username = jwtUtils.getUserNameFromJwtToken( jwt );
+                String userId = jwtUtils.getUserIdFromJwtToken( jwt );
 
-                UserDetails userDetails = new User( username, "", jwtUtils.getAuthoritiesFromJwtToken( jwt ) );
+                UserDetails userDetails = new User( userId, "", jwtUtils.getAuthoritiesFromJwtToken( jwt ) );
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails,

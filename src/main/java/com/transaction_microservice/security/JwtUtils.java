@@ -53,7 +53,7 @@ public class JwtUtils {
         return cookie != null ? cookie.getValue() : null;
     }
 
-    public String getUserNameFromJwtToken( String token ) {
+    public String getUserIdFromJwtToken( String token ) {
         return Jwts
                 .parser()
                 .verifyWith( publicKeyVault.getPublicKey() )
