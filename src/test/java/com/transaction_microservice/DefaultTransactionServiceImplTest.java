@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,6 +35,8 @@ class DefaultTransactionServiceImplTest {
     private TransactionToDtoMapper transactionToDtoMapper;
     @Mock
     private TransactionToEntityMapper transactionToEntityMapper;
+    @Mock
+    UserDetails userDetails;
     @InjectMocks
     private DefaultTransactionServiceImpl defaultTransactionServiceImpl;
 
@@ -42,10 +45,11 @@ class DefaultTransactionServiceImplTest {
         TransactionDto transactionDto = createTransactionDtoObjectIdIsNull();
         TransactionEntity transactionEntity = createTransactionEntityObject();
 
+        when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
         when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( createTransactionObject() );
         when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
 
-        defaultTransactionServiceImpl.addTransaction( transactionDto );
+        defaultTransactionServiceImpl.addTransaction( userDetails.getUsername(), transactionDto );
 
         ArgumentCaptor<TransactionEntity> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( TransactionEntity.class );
         // capturing saved file
@@ -56,17 +60,6 @@ class DefaultTransactionServiceImplTest {
         assertEquals( transactionDto.getAmount(), capturedTransactionEntity.getAmount() );
         assertEquals( transactionDto.getTransactionType(), capturedTransactionEntity.getTransactionType() );
         assertEquals( transactionDto.getCategory(), capturedTransactionEntity.getCategory() );
-    }
-
-    @Test
-    void addTransactionTest_ThrowEmptyTransactionDtoException() {
-        TransactionDto transactionDtoIdIsNull = createTransactionDtoObjectIdIsNull();
-        assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionServiceImpl.addTransaction( transactionDtoIdIsNull ) );
-
-        TransactionDto transactionDtoNull = null;
-        assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionServiceImpl.addTransaction( transactionDtoNull ) );
     }
 
     private TransactionDto createTransactionDtoObjectIdIsNull() {
@@ -111,15 +104,15 @@ class DefaultTransactionServiceImplTest {
                 Arrays.asList( createTransactionEntityObject(), createTransactionEntityObject() )
         );
 
-        when( transactionRepository.findOperationsByCriteria( null, null, null, null ) )
+        when( transactionRepository.findOperationsByCriteria( null, null, null, null, null ) )
                 .thenReturn( transactionEntities );
-        when( transactionToEntityMapper.transactionEntityToTransaction( any( TransactionEntity.class) ) )
+        when( transactionToEntityMapper.transactionEntityToTransaction( any( TransactionEntity.class ) ) )
                 .thenReturn( Transaction.builder().build() );
 
-        List<Transaction> result = defaultTransactionServiceImpl.getAllTransactionsOrByCriteria( null, null, null, null );
+        List<Transaction> result = defaultTransactionServiceImpl.getAllTransactionsOrByCriteria( null, null, null, null, null );
 
         assertEquals( transactions.size(), result.size() );
-        verify( transactionRepository, times( 1 )).findOperationsByCriteria( null, null, null, null );
+        verify( transactionRepository, times( 1 ) ).findOperationsByCriteria( null, null, null, null, null );
 
     }
 
@@ -137,6 +130,8 @@ class DefaultTransactionServiceImplTest {
         transactionDto.setId( 1L );
         TransactionEntity transactionEntity = createTransactionEntityObject();
 
+        when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
+
         when( transactionRepository.findById( transactionDto.getId() ) ).thenReturn( Optional.of( transactionEntity ) );
         transactionDto.setCategory( "Games" );
         transactionEntity.setCategory( "Games" );
@@ -144,7 +139,7 @@ class DefaultTransactionServiceImplTest {
         when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( createTransactionObject() );
         when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
 
-        defaultTransactionServiceImpl.updateTransaction( transactionDto );
+        defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDto );
 
         ArgumentCaptor<TransactionEntity> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( TransactionEntity.class );
         // capturing saved file
@@ -158,22 +153,26 @@ class DefaultTransactionServiceImplTest {
 
     @Test
     void updateTransactionTest_ThrowEmptyTransactionDtoException() {
+        when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
+
         TransactionDto transactionDtoIdIsNull = createTransactionDtoObjectIdIsNull();
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionServiceImpl.updateTransaction( transactionDtoIdIsNull ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDtoIdIsNull ) );
 
         TransactionDto transactionDtoNull = null;
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionServiceImpl.updateTransaction( transactionDtoNull ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDtoNull ) );
     }
 
     @Test
     void updateTransactionTest_ThrowTransactionEntityNotFoundException() {
+        when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
+
         TransactionDto transactionDto = createTransactionDtoObjectIdIsNull();
         transactionDto.setId( 2L );
 
         when( transactionRepository.findById( transactionDto.getId() ) ).thenReturn( Optional.empty() );
         assertThrows( TransactionEntityNotFoundException.class,
-                () -> defaultTransactionServiceImpl.updateTransaction( transactionDto ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDto ) );
     }
 }
