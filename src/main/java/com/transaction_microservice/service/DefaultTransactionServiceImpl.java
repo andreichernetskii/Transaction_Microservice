@@ -66,11 +66,11 @@ public class DefaultTransactionServiceImpl implements TransactionService {
      * If all parameters are null, the method will return all transactions from DB.
      * If not - will be returned transactions according to criteria in parameters.
      *
-     * @param year
-     * @param month
-     * @param transactionType
-     * @param category
-     * @return
+     * @param year - year of transaction creation
+     * @param month - month of transaction creation
+     * @param transactionType - a transaction type
+     * @param category - category of a transaction
+     * @return list of transactions
      */
     @Override
     public List<Transaction> getAllTransactionsOrByCriteria( String userId,
@@ -106,11 +106,11 @@ public class DefaultTransactionServiceImpl implements TransactionService {
      * Method will return full balance if arguments are null.
      * Otherwise, according to arguments.
      *
-     * @param year
-     * @param month
-     * @param transactionType
-     * @param category
-     * @return
+     * @param year - year balance
+     * @param month - month balance
+     * @param transactionType - sum according to a transaction type
+     * @param category - sum according to a category
+     * @return BigDecimal value
      */
     @Override
     public BigDecimal getBalance( String userId,
