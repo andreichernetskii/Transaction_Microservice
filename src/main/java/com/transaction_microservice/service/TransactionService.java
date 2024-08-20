@@ -10,7 +10,6 @@ import java.util.List;
 public interface TransactionService {
     void addTransaction( String userId, TransactionDto transactionDto );
 
-    // todo: refacto to call by user id
     List<Transaction> getAllTransactionsOrByCriteria( String userId,
                                                       Integer year,
                                                       Integer month,

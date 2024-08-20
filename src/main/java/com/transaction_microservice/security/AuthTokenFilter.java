@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
-    private static final Logger logger = LoggerFactory.getLogger( AuthTokenFilter.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( AuthTokenFilter.class );
 
     @Override
     protected void doFilterInternal( HttpServletRequest request,
@@ -29,28 +29,32 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                      FilterChain filterChain ) throws ServletException, IOException {
 
         try {
-            String jwt = jwtUtils.parseJwt( request );
+            String jwtToken = jwtUtils.parseJwt( request );
 
-            if ( jwt != null && jwtUtils.validateJwtToken( jwt ) ) {
-                String userId = jwtUtils.getUserIdFromJwtToken( jwt );
-
-                UserDetails userDetails = new User( userId, "", jwtUtils.getAuthoritiesFromJwtToken( jwt ) );
-
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+            if ( jwtToken != null && jwtUtils.validateJwtToken( jwtToken ) ) {
+                UsernamePasswordAuthenticationToken authentication = createAuthenticationFromUserToken( jwtToken );
 
                 authentication.setDetails( new WebAuthenticationDetailsSource().buildDetails( request ) );
 
                 SecurityContextHolder.getContext().setAuthentication( authentication );
             }
         } catch ( Exception e ) {
-            logger.error( "Cannot set user authentication: {}", e.getMessage() );
+            LOGGER.error( "Cannot set user authentication: {}", e.getMessage() );
         }
 
         filterChain.doFilter( request, response );
+    }
+
+    private UsernamePasswordAuthenticationToken createAuthenticationFromUserToken( String jwtToken ) {
+        String userId = jwtUtils.getUserIdFromJwtToken( jwtToken );
+
+        UserDetails userDetails = new User( userId, "", jwtUtils.getAuthoritiesFromJwtToken( jwtToken ) );
+
+        return new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
     }
 }
 
