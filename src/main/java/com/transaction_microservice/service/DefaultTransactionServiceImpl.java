@@ -7,7 +7,7 @@ import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import com.transaction_microservice.model.Transaction;
 import com.transaction_microservice.model.TransactionDto;
-import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.entity.TransactionEntity;
 import com.transaction_microservice.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,16 +62,6 @@ public class DefaultTransactionServiceImpl implements TransactionService {
         }
     }
 
-    /**
-     * If all parameters are null, the method will return all transactions from DB.
-     * If not - will be returned transactions according to criteria in parameters.
-     *
-     * @param year - year of transaction creation
-     * @param month - month of transaction creation
-     * @param transactionType - a transaction type
-     * @param category - category of a transaction
-     * @return list of transactions
-     */
     @Override
     public List<Transaction> getAllTransactionsOrByCriteria( String userId,
                                                              Integer year,
@@ -102,16 +92,6 @@ public class DefaultTransactionServiceImpl implements TransactionService {
         transactionRepository.deleteById( transactionId );
     }
 
-    /**
-     * Method will return full balance if arguments are null.
-     * Otherwise, according to arguments.
-     *
-     * @param year - year balance
-     * @param month - month balance
-     * @param transactionType - sum according to a transaction type
-     * @param category - sum according to a category
-     * @return BigDecimal value
-     */
     @Override
     public BigDecimal getBalance( String userId,
                                   Integer year,

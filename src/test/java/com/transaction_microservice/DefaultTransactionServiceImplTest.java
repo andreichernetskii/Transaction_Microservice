@@ -7,7 +7,7 @@ import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import com.transaction_microservice.model.Transaction;
 import com.transaction_microservice.model.TransactionDto;
-import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.entity.TransactionEntity;
 import com.transaction_microservice.repository.TransactionRepository;
 import com.transaction_microservice.service.DefaultTransactionServiceImpl;
 import org.junit.jupiter.api.Test;

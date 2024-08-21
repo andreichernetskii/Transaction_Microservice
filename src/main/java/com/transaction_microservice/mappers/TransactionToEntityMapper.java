@@ -1,7 +1,7 @@
 package com.transaction_microservice.mappers;
 
 import com.transaction_microservice.model.Transaction;
-import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.entity.TransactionEntity;
 import org.mapstruct.Mapper;
 
 @Mapper( componentModel = "spring" )

@@ -1,7 +1,7 @@
 package com.transaction_microservice.repository;
 
 import com.transaction_microservice.enums.TransactionType;
-import com.transaction_microservice.model.TransactionEntity;
+import com.transaction_microservice.entity.TransactionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

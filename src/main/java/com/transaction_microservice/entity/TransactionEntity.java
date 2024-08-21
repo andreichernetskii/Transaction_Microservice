@@ -1,4 +1,4 @@
-package com.transaction_microservice.model;
+package com.transaction_microservice.entity;
 
 import com.transaction_microservice.enums.TransactionType;
 import jakarta.persistence.*;
