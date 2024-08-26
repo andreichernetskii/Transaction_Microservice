@@ -11,6 +11,7 @@ import com.transaction_microservice.entity.TransactionEntity;
 import com.transaction_microservice.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -69,21 +70,18 @@ public class DefaultTransactionServiceImpl implements TransactionService {
                                                              TransactionType transactionType,
                                                              String category ) {
 
-        List<TransactionEntity> transactionEntities = transactionRepository.findOperationsByCriteria(
-                userId,
-                year,
-                month,
-                transactionType,
-                category );
-
-        List<Transaction> transactions = new ArrayList<>();
-        for ( TransactionEntity entity : transactionEntities ) {
-            transactions.add( entityMapper.transactionEntityToTransaction( entity ) );
-        }
-
-        return transactions;
+        return transactionRepository.findOperationsByCriteria(
+                    userId,
+                    year,
+                    month,
+                    transactionType,
+                    category )
+                .stream()
+                .map( entityMapper::transactionEntityToTransaction )
+                .toList();
     }
 
+    @Transactional
     @Override
     public void deleteTransaction( String userId, Long transactionId ) {
         if ( transactionRepository.findById( transactionId ).isEmpty() ) {
