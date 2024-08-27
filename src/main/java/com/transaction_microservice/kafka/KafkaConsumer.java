@@ -14,5 +14,6 @@ public class KafkaConsumer {
     @KafkaListener( topics = "public_key_distribution", groupId = "public-key-consumer" )
     public void listen( String publicKey ) {
         publicKeyVault.convertStringToPublicKey( publicKey );
+        System.out.println( publicKey );
     }
 }
