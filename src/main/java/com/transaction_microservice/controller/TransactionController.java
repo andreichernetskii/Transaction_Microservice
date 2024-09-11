@@ -45,7 +45,7 @@ public class TransactionController {
     @PostMapping( "/" )
     public void addTransaction(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody TransactionDto transactionDto) {
-        transactionService.addTransaction( userDetails.getUsername(), transactionDto );
+            @RequestBody List<TransactionDto> transactionDtoList) {
+        transactionService.addTransaction( userDetails.getUsername(), transactionDtoList );
     }
 }

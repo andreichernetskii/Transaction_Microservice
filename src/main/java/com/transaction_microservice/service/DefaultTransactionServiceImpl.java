@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class DefaultTransactionServiceImpl implements TransactionService {
@@ -26,14 +27,17 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     private final TransactionToDtoMapper dtoMapper;
 
     @Override
-    public void addTransaction( String userId, TransactionDto transactionDto ) {
-        transactionDto.setUserId( userId );
-        BigDecimal amount = getBigDecimalWithSign( transactionDto );
-        Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
-        TransactionEntity transactionEntity = entityMapper.transactionToTransactionEntity( transaction );
+    public void addTransaction( String userId, List<TransactionDto> transactionDtoList ) {
+        List<TransactionEntity> transactionEntityList = transactionDtoList
+                .stream()
+                .map( dto -> {
+                    dto.setUserId( userId );
+                    dto.setAmount( getBigDecimalWithSign( dto ) );
+                    return entityMapper.transactionToTransactionEntity( dtoMapper.transactionDtoToTransaction( dto ) );
+                } )
+                .toList();
 
-        transactionEntity.setAmount( amount );
-        transactionRepository.save( transactionEntity );
+        transactionRepository.saveAll( transactionEntityList );
     }
 
     private BigDecimal getBigDecimalWithSign( TransactionDto transactionDto ) {

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionService {
-    void addTransaction( String userId, TransactionDto transactionDto );
+    void addTransaction( String userId, List<TransactionDto> transactionDtoList );
 
     List<Transaction> getAllTransactionsOrByCriteria( String userId,
                                                       Integer year,
