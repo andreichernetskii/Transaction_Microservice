@@ -42,24 +42,30 @@ class DefaultTransactionServiceImplTest {
 
     @Test
     void addTransactionTest_SuccessAdd() {
-        TransactionDto transactionDto = createTransactionDtoObjectIdIsNull();
-        TransactionEntity transactionEntity = createTransactionEntityObject();
+        List<TransactionDto> transactionDtoList = List.of(
+                createTransactionDtoObjectIdIsNull(),
+                createTransactionDtoObjectIdIsNull()
+        );
 
         when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
-        when( transactionToDtoMapper.transactionDtoToTransaction( transactionDto ) ).thenReturn( createTransactionObject() );
-        when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( transactionEntity );
+        when( transactionToDtoMapper.transactionDtoToTransaction( any( TransactionDto.class ) ) ).thenReturn( createTransactionObject() );
+        when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( createTransactionEntityObject() );
 
-        defaultTransactionServiceImpl.addTransaction( userDetails.getUsername(), transactionDto );
+        defaultTransactionServiceImpl.addTransaction( userDetails.getUsername(), transactionDtoList );
 
-        ArgumentCaptor<TransactionEntity> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( TransactionEntity.class );
+        ArgumentCaptor<List<TransactionEntity>> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( List.class );
         // capturing saved file
-        verify( transactionRepository ).save( transactionEntityArgumentCaptor.capture() );
+        verify( transactionRepository ).saveAll( transactionEntityArgumentCaptor.capture() );
         // put data from captured file to the new TransactionEntity
-        TransactionEntity capturedTransactionEntity = transactionEntityArgumentCaptor.getValue();
+        List<TransactionEntity> capturedTransactionEntityList = transactionEntityArgumentCaptor.getValue();
 
-        assertEquals( transactionDto.getAmount(), capturedTransactionEntity.getAmount() );
-        assertEquals( transactionDto.getTransactionType(), capturedTransactionEntity.getTransactionType() );
-        assertEquals( transactionDto.getCategory(), capturedTransactionEntity.getCategory() );
+        assertEquals( transactionDtoList.get( 0 ).getAmount(), capturedTransactionEntityList.get( 0 ).getAmount() );
+        assertEquals( transactionDtoList.get( 0 ).getTransactionType(), capturedTransactionEntityList.get( 0 ).getTransactionType() );
+        assertEquals( transactionDtoList.get( 0 ).getCategory(), capturedTransactionEntityList.get( 0 ).getCategory() );
+
+        assertEquals( transactionDtoList.get( 1 ).getAmount(), capturedTransactionEntityList.get( 1 ).getAmount() );
+        assertEquals( transactionDtoList.get( 1 ).getTransactionType(), capturedTransactionEntityList.get( 1 ).getTransactionType() );
+        assertEquals( transactionDtoList.get( 1 ).getCategory(), capturedTransactionEntityList.get( 1 ).getCategory() );
     }
 
     private TransactionDto createTransactionDtoObjectIdIsNull() {
