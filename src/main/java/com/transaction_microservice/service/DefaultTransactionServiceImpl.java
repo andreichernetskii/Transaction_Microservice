@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +32,8 @@ public class DefaultTransactionServiceImpl implements TransactionService {
                 .map( dto -> {
                     dto.setUserId( userId );
                     dto.setAmount( getBigDecimalWithSign( dto ) );
-                    return entityMapper.transactionToTransactionEntity( dtoMapper.transactionDtoToTransaction( dto ) );
+                    return entityMapper.transactionToTransactionEntity(
+                            dtoMapper.transactionDtoToTransaction( dto ) );
                 } )
                 .toList();
 
@@ -51,8 +51,9 @@ public class DefaultTransactionServiceImpl implements TransactionService {
         checkTransactionDtoNotNull( transactionDto );
         checkTransactionExists( transactionDto );
 
-        Transaction transaction = dtoMapper.transactionDtoToTransaction( transactionDto );
-        transactionRepository.save( entityMapper.transactionToTransactionEntity( transaction ) );
+        transactionRepository.save(
+                entityMapper.transactionToTransactionEntity(
+                        dtoMapper.transactionDtoToTransaction( transactionDto ) ) );
     }
 
     private void checkTransactionDtoNotNull( TransactionDto transactionDto ) {
