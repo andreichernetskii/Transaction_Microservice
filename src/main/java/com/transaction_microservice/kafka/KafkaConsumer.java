@@ -16,4 +16,9 @@ public class KafkaConsumer {
         publicKeyVault.convertStringToPublicKey( publicKey );
         System.out.println( publicKey );
     }
+
+    @KafkaListener( topics = "new_limit", groupId = "limit-consumer" )
+    public void listenForLimitTypes( String limit ) {
+        System.out.println( limit );
+    }
 }
