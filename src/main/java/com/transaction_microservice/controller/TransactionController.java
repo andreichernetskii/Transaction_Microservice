@@ -23,11 +23,7 @@ public class TransactionController {
                                                             @RequestBody( required = false ) SearchCriteria searchCriteria ) {
 
         return transactionService.getAllTransactionsOrByCriteria(
-                userDetails.getUsername(),
-                searchCriteria.getYear(),
-                searchCriteria.getMonth(),
-                searchCriteria.getTransactionType(),
-                searchCriteria.getCategory() );
+                userDetails.getUsername(), searchCriteria );
     }
 
     @DeleteMapping( "/{transactionId}" )

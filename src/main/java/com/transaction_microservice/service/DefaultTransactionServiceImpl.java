@@ -5,6 +5,7 @@ import com.transaction_microservice.exception_handler.exceptions.EmptyTransactio
 import com.transaction_microservice.exception_handler.exceptions.TransactionEntityNotFoundException;
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
+import com.transaction_microservice.model.SearchCriteria;
 import com.transaction_microservice.model.Transaction;
 import com.transaction_microservice.model.TransactionDto;
 import com.transaction_microservice.entity.TransactionEntity;
@@ -69,21 +70,23 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsOrByCriteria( String userId,
-                                                             Integer year,
-                                                             Integer month,
-                                                             TransactionType transactionType,
-                                                             String category ) {
+    public List<Transaction> getAllTransactionsOrByCriteria( String userId, SearchCriteria searchCriteria ) {
 
-        return transactionRepository.findOperationsByCriteria(
-                    userId,
-                    year,
-                    month,
-                    transactionType,
-                    category )
-                .stream()
-                .map( entityMapper::transactionEntityToTransaction )
-                .toList();
+        List<TransactionEntity> resultList = (searchCriteria != null)
+                ? transactionRepository.findOperationsByCriteria(
+                        userId,
+                        searchCriteria.getYear(),
+                        searchCriteria.getMonth(),
+                        searchCriteria.getTransactionType(),
+                        searchCriteria.getCategory() )
+                : transactionRepository.findOperationsByCriteria(
+                        userId,
+                        null,
+                        null,
+                        null,
+                        null );
+
+        return resultList.stream().map( entityMapper::transactionEntityToTransaction ).toList();
     }
 
     @Transactional

@@ -115,7 +115,7 @@ class DefaultTransactionServiceImplTest {
         when( transactionToEntityMapper.transactionEntityToTransaction( any( TransactionEntity.class ) ) )
                 .thenReturn( Transaction.builder().build() );
 
-        List<Transaction> result = defaultTransactionServiceImpl.getAllTransactionsOrByCriteria( null, null, null, null, null );
+        List<Transaction> result = defaultTransactionServiceImpl.getAllTransactionsOrByCriteria( null, null );
 
         assertEquals( transactions.size(), result.size() );
         verify( transactionRepository, times( 1 ) ).findOperationsByCriteria( null, null, null, null, null );
