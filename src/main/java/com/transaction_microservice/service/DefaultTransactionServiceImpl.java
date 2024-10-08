@@ -7,7 +7,7 @@ import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import com.transaction_microservice.model.SearchCriteria;
 import com.transaction_microservice.model.Transaction;
-import com.transaction_microservice.model.TransactionDto;
+import com.transaction_microservice.model.TransactionDTO;
 import com.transaction_microservice.entity.TransactionEntity;
 import com.transaction_microservice.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ public class DefaultTransactionServiceImpl implements TransactionService {
     private final TransactionToDtoMapper dtoMapper;
 
     @Override
-    public void addTransaction( String userId, List<TransactionDto> transactionDtoList ) {
-        List<TransactionEntity> transactionEntityList = transactionDtoList
+    public void addTransaction( String userId, List<TransactionDTO> transactionDTOList ) {
+        List<TransactionEntity> transactionEntityList = transactionDTOList
                 .stream()
                 .map( dto -> {
                     dto.setUserId( userId );
@@ -41,14 +41,14 @@ public class DefaultTransactionServiceImpl implements TransactionService {
         transactionRepository.saveAll( transactionEntityList );
     }
 
-    private BigDecimal getBigDecimalWithSign( TransactionDto transactionDto ) {
+    private BigDecimal getBigDecimalWithSign( TransactionDTO transactionDto ) {
         return ( transactionDto.getTransactionType() == TransactionType.EXPENSE )
                 ? transactionDto.getAmount().negate()
                 : transactionDto.getAmount();
     }
 
     @Override
-    public void updateTransaction( String userId, TransactionDto transactionDto ) {
+    public void updateTransaction( String userId, TransactionDTO transactionDto ) {
         checkTransactionDtoNotNull( transactionDto );
         checkTransactionExists( transactionDto );
 
@@ -57,13 +57,13 @@ public class DefaultTransactionServiceImpl implements TransactionService {
                         dtoMapper.transactionDtoToTransaction( transactionDto ) ) );
     }
 
-    private void checkTransactionDtoNotNull( TransactionDto transactionDto ) {
+    private void checkTransactionDtoNotNull( TransactionDTO transactionDto ) {
         if ( transactionDto == null || transactionDto.getId() == null ) {
             throw new EmptyTransactionDtoException( "TransactionDto is null!" );
         }
     }
 
-    private void checkTransactionExists( TransactionDto transactionDto ) {
+    private void checkTransactionExists( TransactionDTO transactionDto ) {
         if ( transactionRepository.findById( transactionDto.getId() ).isEmpty() ) {
             throw new TransactionEntityNotFoundException( "Entity with ID " + transactionDto.getId() + " does not exist!" );
         }

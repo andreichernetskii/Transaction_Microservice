@@ -6,7 +6,7 @@ import com.transaction_microservice.exception_handler.exceptions.TransactionEnti
 import com.transaction_microservice.mappers.TransactionToDtoMapper;
 import com.transaction_microservice.mappers.TransactionToEntityMapper;
 import com.transaction_microservice.model.Transaction;
-import com.transaction_microservice.model.TransactionDto;
+import com.transaction_microservice.model.TransactionDTO;
 import com.transaction_microservice.entity.TransactionEntity;
 import com.transaction_microservice.repository.TransactionRepository;
 import com.transaction_microservice.service.DefaultTransactionServiceImpl;
@@ -42,16 +42,16 @@ class DefaultTransactionServiceImplTest {
 
     @Test
     void addTransactionTest_SuccessAdd() {
-        List<TransactionDto> transactionDtoList = List.of(
+        List<TransactionDTO> transactionDTOList = List.of(
                 createTransactionDtoObjectIdIsNull(),
                 createTransactionDtoObjectIdIsNull()
         );
 
         when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
-        when( transactionToDtoMapper.transactionDtoToTransaction( any( TransactionDto.class ) ) ).thenReturn( createTransactionObject() );
+        when( transactionToDtoMapper.transactionDtoToTransaction( any( TransactionDTO.class ) ) ).thenReturn( createTransactionObject() );
         when( transactionToEntityMapper.transactionToTransactionEntity( any( Transaction.class ) ) ).thenReturn( createTransactionEntityObject() );
 
-        defaultTransactionServiceImpl.addTransaction( userDetails.getUsername(), transactionDtoList );
+        defaultTransactionServiceImpl.addTransaction( userDetails.getUsername(), transactionDTOList );
 
         ArgumentCaptor<List<TransactionEntity>> transactionEntityArgumentCaptor = ArgumentCaptor.forClass( List.class );
         // capturing saved file
@@ -59,17 +59,17 @@ class DefaultTransactionServiceImplTest {
         // put data from captured file to the new TransactionEntity
         List<TransactionEntity> capturedTransactionEntityList = transactionEntityArgumentCaptor.getValue();
 
-        assertEquals( transactionDtoList.get( 0 ).getAmount(), capturedTransactionEntityList.get( 0 ).getAmount() );
-        assertEquals( transactionDtoList.get( 0 ).getTransactionType(), capturedTransactionEntityList.get( 0 ).getTransactionType() );
-        assertEquals( transactionDtoList.get( 0 ).getCategory(), capturedTransactionEntityList.get( 0 ).getCategory() );
+        assertEquals( transactionDTOList.get( 0 ).getAmount(), capturedTransactionEntityList.get( 0 ).getAmount() );
+        assertEquals( transactionDTOList.get( 0 ).getTransactionType(), capturedTransactionEntityList.get( 0 ).getTransactionType() );
+        assertEquals( transactionDTOList.get( 0 ).getCategory(), capturedTransactionEntityList.get( 0 ).getCategory() );
 
-        assertEquals( transactionDtoList.get( 1 ).getAmount(), capturedTransactionEntityList.get( 1 ).getAmount() );
-        assertEquals( transactionDtoList.get( 1 ).getTransactionType(), capturedTransactionEntityList.get( 1 ).getTransactionType() );
-        assertEquals( transactionDtoList.get( 1 ).getCategory(), capturedTransactionEntityList.get( 1 ).getCategory() );
+        assertEquals( transactionDTOList.get( 1 ).getAmount(), capturedTransactionEntityList.get( 1 ).getAmount() );
+        assertEquals( transactionDTOList.get( 1 ).getTransactionType(), capturedTransactionEntityList.get( 1 ).getTransactionType() );
+        assertEquals( transactionDTOList.get( 1 ).getCategory(), capturedTransactionEntityList.get( 1 ).getCategory() );
     }
 
-    private TransactionDto createTransactionDtoObjectIdIsNull() {
-        return TransactionDto
+    private TransactionDTO createTransactionDtoObjectIdIsNull() {
+        return TransactionDTO
                 .builder()
                 .amount( new BigDecimal( 100 ) )
                 .transactionType( TransactionType.INCOME )
@@ -132,7 +132,7 @@ class DefaultTransactionServiceImplTest {
 
     @Test
     void updateTransactionTest_SuccessUpdate() {
-        TransactionDto transactionDto = createTransactionDtoObjectIdIsNull();
+        TransactionDTO transactionDto = createTransactionDtoObjectIdIsNull();
         transactionDto.setId( 1L );
         TransactionEntity transactionEntity = createTransactionEntityObject();
 
@@ -161,20 +161,20 @@ class DefaultTransactionServiceImplTest {
     void updateTransactionTest_ThrowEmptyTransactionDtoException() {
         when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
 
-        TransactionDto transactionDtoIdIsNull = createTransactionDtoObjectIdIsNull();
+        TransactionDTO transactionDTOIdIsNull = createTransactionDtoObjectIdIsNull();
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDtoIdIsNull ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDTOIdIsNull ) );
 
-        TransactionDto transactionDtoNull = null;
+        TransactionDTO transactionDTONull = null;
         assertThrows( EmptyTransactionDtoException.class,
-                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDtoNull ) );
+                () -> defaultTransactionServiceImpl.updateTransaction( userDetails.getUsername(), transactionDTONull ) );
     }
 
     @Test
     void updateTransactionTest_ThrowTransactionEntityNotFoundException() {
         when( userDetails.getUsername() ).thenReturn( "88df8aasd88a2" );
 
-        TransactionDto transactionDto = createTransactionDtoObjectIdIsNull();
+        TransactionDTO transactionDto = createTransactionDtoObjectIdIsNull();
         transactionDto.setId( 2L );
 
         when( transactionRepository.findById( transactionDto.getId() ) ).thenReturn( Optional.empty() );

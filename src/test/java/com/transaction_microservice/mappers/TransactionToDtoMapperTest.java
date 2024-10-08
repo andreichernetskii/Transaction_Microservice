@@ -1,7 +1,7 @@
 package com.transaction_microservice.mappers;
 
 import com.transaction_microservice.model.Transaction;
-import com.transaction_microservice.model.TransactionDto;
+import com.transaction_microservice.model.TransactionDTO;
 import com.transaction_microservice.enums.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ class TransactionToDtoMapperTest {
 
     @Test
     void transactionDtoToTransaction() {
-        TransactionDto transactionDto = createTransactionDtoObject();
+        TransactionDTO transactionDto = createTransactionDtoObject();
         Transaction transaction = mapper.transactionDtoToTransaction( transactionDto );
 
         assertNotNull( transaction );
@@ -30,8 +30,8 @@ class TransactionToDtoMapperTest {
         assertEquals( transactionDto.getCreationDate(), transaction.getCreationDate() );
     }
 
-    private TransactionDto createTransactionDtoObject() {
-        return TransactionDto
+    private TransactionDTO createTransactionDtoObject() {
+        return TransactionDTO
                 .builder()
                 .amount( new BigDecimal( 100 ) )
                 .transactionType( TransactionType.INCOME )

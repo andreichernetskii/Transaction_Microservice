@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @Builder
-public class TransactionDto {
+public class TransactionDTO {
     @Nullable
     private Long id;
     @Nullable
-    String userId;
+    private String userId;
     private BigDecimal amount;
     private TransactionType transactionType;
     private String category;

@@ -1,9 +1,9 @@
 package com.transaction_microservice.controller;
 
 import com.transaction_microservice.model.SearchCriteria;
+import com.transaction_microservice.model.TransactionDTO;
 import com.transaction_microservice.service.TransactionService;
 import com.transaction_microservice.model.Transaction;
-import com.transaction_microservice.model.TransactionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,14 +34,14 @@ public class TransactionController {
 
     @PutMapping( "/" )
     public void updateTransaction( @AuthenticationPrincipal UserDetails userDetails,
-                                   @RequestBody TransactionDto transactionDto ) {
+                                   @RequestBody TransactionDTO transactionDto ) {
         transactionService.updateTransaction( userDetails.getUsername(), transactionDto );
     }
 
     @PostMapping( "/" )
     public void addTransaction(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody List<TransactionDto> transactionDtoList) {
-        transactionService.addTransaction( userDetails.getUsername(), transactionDtoList );
+            @RequestBody List<TransactionDTO> transactionDTOList ) {
+        transactionService.addTransaction( userDetails.getUsername(), transactionDTOList );
     }
 }
