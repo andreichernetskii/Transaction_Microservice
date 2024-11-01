@@ -18,6 +18,6 @@ public class KafkaConsumerService {
             containerFactory = "publicKeyKafkaListenerContainerFactory" )
     public void listen( String publicKey ) {
         publicKeyVault.convertStringToPublicKey( publicKey );
-        System.out.println( publicKey );
+        logger.info( "Public key: " + publicKey );
     }
 }
