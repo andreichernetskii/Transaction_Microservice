@@ -24,8 +24,6 @@ public class KafkaConsumerConfig {
     @Value( value = "${kafka.consumer.group1}" )
     private String publicKeyGroup;
 
-    private final PublicKeyVault publicKeyVault;
-
     //todo: rework producer in auth microservice
     //todo: how to config offset reset? and am i need this?
     @Bean
@@ -41,21 +39,12 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> limitsKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, String> publicKeyKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory( publicKeyConsumerFactory() );
 
         return factory;
     }
 
-//    @KafkaListener( topics = "public_key_distribution", groupId = "public-key-consumer" )
-//    public void listen( String publicKey ) {
-//        publicKeyVault.convertStringToPublicKey( publicKey );
-//        System.out.println( publicKey );
-//    }
-//
-//    @KafkaListener( topics = "new_limit", groupId = "limit-consumer" )
-//    public void listenForLimitTypes( String limit ) {
-//        System.out.println( limit );
-//    }
+
 }
