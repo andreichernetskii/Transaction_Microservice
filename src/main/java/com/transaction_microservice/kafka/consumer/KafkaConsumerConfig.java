@@ -1,6 +1,5 @@
 package com.transaction_microservice.kafka.consumer;
 
-import com.transaction_microservice.security.PublicKeyVault;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
