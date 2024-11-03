@@ -18,14 +18,13 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
+
     @Value( value = "${spring.kafka.bootstrap-servers}" )
     private String kafkaBootstrapAddress;
 
     @Value( value = "${kafka.consumer.group1}" )
     private String publicKeyGroup;
 
-    //todo: rework producer in auth microservice
-    //todo: how to config offset reset? and am i need this?
     @Bean
     public ConsumerFactory<String, String> publicKeyConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
