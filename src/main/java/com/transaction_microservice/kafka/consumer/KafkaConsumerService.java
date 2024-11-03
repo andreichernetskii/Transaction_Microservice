@@ -4,6 +4,7 @@ import com.transaction_microservice.security.PublicKeyVault;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.stereotype.Service;
 import org.springframework.kafka.annotation.KafkaListener;
 
@@ -13,8 +14,8 @@ public class KafkaConsumerService {
     public static final Logger logger = LoggerFactory.getLogger( KafkaConsumerService.class );
     private final PublicKeyVault publicKeyVault;
 
-    @KafkaListener( topics = "public_key_distribution",
-            groupId = "${kafka.consumer.group1}",
+    @KafkaListener( groupId = "${kafka.consumer.group1}",
+            topicPartitions = { @TopicPartition( topic = "public_key_distribution", partitions = "0" ) },
             containerFactory = "publicKeyKafkaListenerContainerFactory" )
     public void listen( String publicKey ) {
         publicKeyVault.convertStringToPublicKey( publicKey );
